@@ -10,10 +10,10 @@ Every dataset's index has to start at 0
 import os
 from os.path import join
 import sys
-import torch
+import paddorch as torch
 import numpy as np
 import pandas as pd
-from torch.utils.data import Dataset, DataLoader
+from paddorch.utils.data import Dataset, DataLoader
 from scipy.sparse import csr_matrix
 import scipy.sparse as sp
 import world

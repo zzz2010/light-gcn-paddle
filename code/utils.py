@@ -6,16 +6,16 @@ Xiangnan He et al. LightGCN: Simplifying and Powering Graph Convolution Network 
 @author: Jianbai Ye (gusye@mail.ustc.edu.cn)
 '''
 import world
-import torch
-from torch import nn, optim
+import paddorch as torch
+from paddorch import nn, optim
 import numpy as np
-from torch import log
+
 from dataloader import BasicDataset
 from time import time
-from model import LightGCN
+
 from model import PairWiseModel
 from sklearn.metrics import roc_auc_score
-import random
+
 import os
 try:
     from cppimport import imp_from_filepath

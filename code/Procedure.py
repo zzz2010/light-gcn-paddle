@@ -8,7 +8,7 @@ Design training and test process
 '''
 import world
 import numpy as np
-import torch
+import paddorch as torch
 import utils
 import dataloader
 from pprint import pprint
