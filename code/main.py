@@ -25,7 +25,7 @@ if world.LOAD:
     try:
         Recmodel.load_state_dict(torch.load(weight_file,map_location=torch.device('cpu')))
         world.cprint(f"loaded model weights from {weight_file}")
-    except FileNotFoundError:
+    except :
         print(f"{weight_file} not exists, start from beginning")
 Neg_k = 1
 

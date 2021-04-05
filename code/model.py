@@ -171,7 +171,7 @@ class LightGCN(BasicModel):
             else:
                 all_emb = torch.sparse.mm(g_droped, all_emb)
 
-            all_emb.stop_gradient=False
+            # all_emb.stop_gradient=False
             embs.append(all_emb)
 
         embs = torch.stack(embs, dim=1)
