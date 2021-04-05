@@ -1,7 +1,9 @@
 paddlepaddle-gpu==2.0.1
 pandas==0.24.2
 scipy
-numpy==1.16.4
+numpy
 tensorboardX==1.8
-scikit-learn==0.23.2
-tqdm==4.48.2
+scikit-learn
+tqdm
+pybind11
+cppimport

@@ -15,6 +15,7 @@ import register
 from register import dataset
 
 Recmodel = register.MODELS[world.model_name](world.config, dataset)
+print("11111111111111111111")
 Recmodel = Recmodel.to(world.device)
 bpr = utils.BPRLoss(Recmodel, world.config)
 
@@ -36,9 +37,10 @@ if world.tensorboard:
 else:
     w = None
     world.cprint("not enable tensorflowboard")
-
+print("22222222222222222")
 try:
     for epoch in range(world.TRAIN_epochs):
+
         start = time.time()
         if epoch %10 == 0:
             cprint("[TEST]")
