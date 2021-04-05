@@ -105,6 +105,7 @@ class LightGCN(BasicModel):
 #             nn.init.xavier_uniform_(self.embedding_item.weight, gain=1)
 #             print('use xavier initilizer')
 # random normal init seems to be a better choice when lightGCN actually don't use any non-linear activation function
+
             nn.init.normal_(self.embedding_user.weight, std=0.1)
             nn.init.normal_(self.embedding_item.weight, std=0.1)
             world.cprint('use NORMAL distribution initilizer')
@@ -140,10 +141,13 @@ class LightGCN(BasicModel):
     def computer(self):
         """
         propagate methods for lightGCN
-        """       
-        users_emb = self.embedding_user.weight
-        items_emb = self.embedding_item.weight
+        """
+
+        users_emb=self.embedding_user.weight
+        items_emb =  self.embedding_item.weight
+
         all_emb = torch.cat([users_emb, items_emb])
+
         #   torch.split(all_emb , [self.num_users, self.num_items])
         embs = [all_emb]
         if self.config['dropout']:
@@ -151,10 +155,11 @@ class LightGCN(BasicModel):
                 print("droping")
                 g_droped = self.__dropout(self.keep_prob)
             else:
-                g_droped = self.Graph        
+                g_droped = self.Graph
         else:
-            g_droped = self.Graph    
-        
+            g_droped = self.Graph
+
+
         for layer in range(self.n_layers):
             if self.A_split:
                 temp_emb = []
@@ -162,13 +167,21 @@ class LightGCN(BasicModel):
                     temp_emb.append(torch.sparse.mm(g_droped[f], all_emb))
                 side_emb = torch.cat(temp_emb, dim=0)
                 all_emb = side_emb
+
             else:
                 all_emb = torch.sparse.mm(g_droped, all_emb)
+
+            all_emb.stop_gradient=False
             embs.append(all_emb)
+
         embs = torch.stack(embs, dim=1)
+
         #print(embs.size())
         light_out = torch.mean(embs, dim=1)
+
+
         users, items = torch.split(light_out, [self.num_users, self.num_items])
+
         return users, items
     
     def getUsersRating(self, users):
@@ -186,6 +199,7 @@ class LightGCN(BasicModel):
         users_emb_ego = self.embedding_user(users)
         pos_emb_ego = self.embedding_item(pos_items)
         neg_emb_ego = self.embedding_item(neg_items)
+
         return users_emb, pos_emb, neg_emb, users_emb_ego, pos_emb_ego, neg_emb_ego
     
     def bpr_loss(self, users, pos, neg):

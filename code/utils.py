@@ -45,7 +45,9 @@ class BPRLoss:
 
         self.opt.zero_grad()
         loss.backward()
+        # self.opt.step()
         self.opt.minimize(loss)
+        # print("losssssssssssss:",loss)
         return loss.cpu().item()
 
 
@@ -113,7 +115,8 @@ def getFileName():
 
 def minibatch(*tensors, **kwargs):
 
-    batch_size = kwargs.get('batch_size', world.config['bpr_batch_size'])
+    batch_size = int(kwargs.get('batch_size', world.config['bpr_batch_size']))
+
 
     if len(tensors) == 1:
         tensor = tensors[0]

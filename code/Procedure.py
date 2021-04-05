@@ -119,7 +119,7 @@ def Test(dataset, Recmodel, epoch, w=None, multicore=0):
             #                   test_data) for i, test_data in enumerate(groundTrue)
             #     ]
             # auc_record.extend(aucs)
-            del rating
+            # del rating
             users_list.append(batch_users)
             rating_list.append(rating_K.cpu())
             groundTrue_list.append(groundTrue)
