@@ -45,8 +45,7 @@ class BPRLoss:
 
         self.opt.zero_grad()
         loss.backward()
-        self.opt.step()
-
+        self.opt.minimize(loss)
         return loss.cpu().item()
 
 

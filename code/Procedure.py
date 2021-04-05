@@ -100,7 +100,7 @@ def Test(dataset, Recmodel, epoch, w=None, multicore=0):
         for batch_users in utils.minibatch(users, batch_size=u_batch_size):
             allPos = dataset.getUserPosItems(batch_users)
             groundTrue = [testDict[u] for u in batch_users]
-            batch_users_gpu = torch.Tensor(batch_users).long()
+            batch_users_gpu = torch.Tensor(np.array(batch_users) ).long()
             batch_users_gpu = batch_users_gpu.to(world.device)
 
             rating = Recmodel.getUsersRating(batch_users_gpu)
