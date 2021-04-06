@@ -30,7 +30,7 @@ def parse_args():
                         help="the batch size of users for testing")
     parser.add_argument('--dataset', type=str,default='gowalla',
                         help="available datasets: [lastfm, gowalla, yelp2018, amazon-book]")
-    parser.add_argument('--path', type=str,default="./checkpoints",
+    parser.add_argument('--path', type=str,default="./",
                         help="path to save weights")
     parser.add_argument('--topks', nargs='?',default="[20]",
                         help="@k test list")
