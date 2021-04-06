@@ -66,11 +66,11 @@ if __name__ == '__main__':
 
       torch_out.sum().backward()
 
-      print("torch grad:",torch.mean(Recmodel_torch.embedding_user.weight.grad),torch.max(Recmodel_torch.embedding_user.weight.grad))
+      print("torch grad:",torch.mean(Recmodel_torch.embedding_user.weight.grad),torch.max(Recmodel_torch.embedding_user.weight.grad),torch.min(Recmodel_torch.embedding_user.weight.grad))
 
       paddle_loss=paddle_out.sum().backward(retain_graph=True)
 
-      print("paddle grad:",paddorch.mean(Recmodel_paddle.embedding_user.weight.gradient()),torch.max(Recmodel_paddle.embedding_user.weight.gradient()))
+      print("paddle grad:",np.mean(Recmodel_paddle.embedding_user.weight.gradient()),np.max(Recmodel_paddle.embedding_user.weight.gradient()),np.min(Recmodel_paddle.embedding_user.weight.gradient()))
 
 
 

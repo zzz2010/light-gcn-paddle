@@ -20,7 +20,7 @@ ROOT_PATH = "../"
 CODE_PATH = join(ROOT_PATH, 'code')
 DATA_PATH = join(ROOT_PATH, 'data')
 BOARD_PATH = join(CODE_PATH, 'runs')
-FILE_PATH = join(CODE_PATH, 'checkpoints')
+FILE_PATH = join(args.path, 'checkpoints')
 import sys
 sys.path.append(join(CODE_PATH, 'sources'))
 
