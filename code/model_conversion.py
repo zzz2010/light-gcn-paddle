@@ -38,7 +38,7 @@ if __name__ == '__main__':
   print(">>SEED:", world.seed)
   # ==============================
 
-  N_users=14000
+  N_users=4000
   user_list=np.arange(N_users)
   item_list=np.arange(N_users)
   neg_list=np.arange(N_users,N_users*2)
