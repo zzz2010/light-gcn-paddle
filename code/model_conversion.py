@@ -43,9 +43,9 @@ if __name__ == '__main__':
   item_list=np.arange(N_users)
   neg_list=np.arange(N_users,N_users*2)
 
-  import joblib
-
-  user_list,item_list,neg_list=joblib.load("debug.dat.joblib")
+  # import joblib
+  #
+  # user_list,item_list,neg_list=joblib.load("debug.dat.joblib")
   place = fluid.CUDAPlace(0)
   with fluid.dygraph.guard(place=place):
       torch_dataset=torch_dataloader.Loader(path="../data/"+world.dataset)
@@ -64,6 +64,7 @@ if __name__ == '__main__':
       opt = paddorch.optim.Adam(Recmodel_paddle.parameters())
       paddle_state_dict=load_pytorch_pretrain_model(Recmodel_paddle,torch_state_dict)
       Recmodel_paddle.load_state_dict(paddle_state_dict)
+      paddorch.save(Recmodel_paddle.state_dict(),"Recmodel_paddle_state_dict")
       print("loaded paddle")
 
 
@@ -87,7 +88,9 @@ if __name__ == '__main__':
       print("maximum User grad difference",np.max(np.abs(torch_grad-paddle_grad)),paddle_grad.shape)
 
       torch_grad = Recmodel_torch.embedding_item.weight.grad.detach().cpu().numpy()
+      print("torch grad:", np.mean(torch_grad), np.max(torch_grad), np.min(torch_grad))
       paddle_grad = Recmodel_paddle.embedding_item.weight.gradient()
+      print("paddle grad:", np.mean(paddle_grad), np.max(paddle_grad), np.min(paddle_grad))
       print("maximum Item grad difference", np.max(np.abs(torch_grad - paddle_grad)), paddle_grad.shape)
       from  matplotlib import  pyplot as plt
       # plt.hist(np.abs(torch_grad - paddle_grad),bins=100)
