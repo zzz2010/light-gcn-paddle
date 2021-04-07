@@ -47,7 +47,7 @@ class BPRLoss:
         loss.backward()
         # self.opt.step()
         self.opt.minimize(loss)
-        # print("losssssssssssss:",loss)
+
         return loss.cpu().item()
 
 

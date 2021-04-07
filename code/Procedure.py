@@ -37,7 +37,10 @@ def BPR_train_original(dataset, recommend_model, loss_class, epoch, neg_k=1, w=N
     users = users.to(world.device)
     posItems = posItems.to(world.device)
     negItems = negItems.to(world.device)
+
+
     users, posItems, negItems = utils.shuffle(users, posItems, negItems)
+
     total_batch = len(users) // world.config['bpr_batch_size'] + 1
     aver_loss = 0.
     for (batch_i,
@@ -47,8 +50,11 @@ def BPR_train_original(dataset, recommend_model, loss_class, epoch, neg_k=1, w=N
                                                    posItems,
                                                    negItems,
                                                    batch_size=world.config['bpr_batch_size'])):
-        cri = bpr.stageOne(batch_users, batch_pos, batch_neg)
+
+
+        cri = bpr.stageOne( batch_users ,  batch_pos ,  batch_neg )
         aver_loss += cri
+
         if world.tensorboard:
             w.add_scalar(f'BPRLoss/BPR', cri, epoch * int(len(users) / world.config['bpr_batch_size']) + batch_i)
     aver_loss = aver_loss / total_batch

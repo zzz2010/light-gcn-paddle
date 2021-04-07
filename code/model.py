@@ -193,6 +193,7 @@ class LightGCN(BasicModel):
     
     def getEmbedding(self, users, pos_items, neg_items):
         all_users, all_items = self.computer()
+
         users_emb = all_users[users]
         pos_emb = all_items[pos_items]
         neg_emb = all_items[neg_items]
@@ -203,6 +204,7 @@ class LightGCN(BasicModel):
         return users_emb, pos_emb, neg_emb, users_emb_ego, pos_emb_ego, neg_emb_ego
     
     def bpr_loss(self, users, pos, neg):
+
         (users_emb, pos_emb, neg_emb, 
         userEmb0,  posEmb0, negEmb0) = self.getEmbedding(users.long(), pos.long(), neg.long())
         reg_loss = (1/2)*(userEmb0.norm(2).pow(2) + 
