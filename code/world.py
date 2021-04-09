@@ -35,6 +35,7 @@ all_dataset = ['lastfm', 'gowalla', 'yelp2018', 'amazon-book']
 all_models  = ['mf', 'lgn']
 # config['batch_size'] = 4096
 config['bpr_batch_size'] = args.bpr_batch
+config['device'] = args.device
 config['latent_dim_rec'] = args.recdim
 config['lightGCN_n_layers']= args.layer
 config['dropout'] = args.dropout
