@@ -40,11 +40,11 @@ if __name__ == '__main__':
   item_list=np.arange(N_users)
   neg_list=np.arange(N_users,N_users*2)
 
-  place = fluid.CUDAPlace(0)
+  place = fluid.CPUPlace()
   with fluid.dygraph.guard(place=place):
 
       Recmodel_paddle=model.LightGCN(world.config,dataset)
-      Recmodel_paddle.load_state_dict(paddorch.load("../Recmodel_paddle_state_dict"))
+      Recmodel_paddle.load_state_dict(paddorch.load("Recmodel_paddle_state_dict"))
       opt = paddorch.optim.Adam(Recmodel_paddle.parameters())
 
       print("loaded paddle")

@@ -23,6 +23,7 @@ import register
 from register import dataset
 import torch_dataloader
 
+import paddle
 
 
 
@@ -43,10 +44,11 @@ if __name__ == '__main__':
   item_list=np.arange(N_users)
   neg_list=np.arange(N_users,N_users*2)
 
-  # import joblib
+  import joblib
   #
-  # user_list,item_list,neg_list=joblib.load("debug.dat.joblib")
+  user_list,item_list,neg_list=joblib.load("debug.dat.joblib")
   place = fluid.CUDAPlace(0)
+  # place= fluid.CPUPlace()
   with fluid.dygraph.guard(place=place):
       torch_dataset=torch_dataloader.Loader(path="../data/"+world.dataset)
       Recmodel_torch=torch_model.LightGCN(world.config,torch_dataset)
@@ -68,20 +70,25 @@ if __name__ == '__main__':
       print("loaded paddle")
 
 
-
+      from time import time
+      start=time()
       paddle_out=Recmodel_paddle(paddorch.LongTensor(user_list),paddorch.LongTensor(item_list))
       paddle_out,_ =Recmodel_paddle.bpr_loss(paddorch.LongTensor(user_list),paddorch.LongTensor(item_list),paddorch.LongTensor(neg_list))
+      print("forward time:", time() - start)
       print("forward output,max diff:",np.max(np.abs(torch_out.detach().numpy()-paddle_out.detach().numpy())))
 
 
-      assert max(torch_out.detach().numpy()-paddle_out.detach().numpy())<0.0001,"paddle and torch forward output not match!"
+      # assert max(torch_out.detach().numpy()-paddle_out.detach().numpy())<0.0001,"paddle and torch forward output not match!"
 
       torch_out.sum().backward( )
       torch_grad=Recmodel_torch.embedding_user.weight.grad.detach().cpu().numpy()
       print("torch grad:",np.mean(torch_grad),np.max(torch_grad),np.min(torch_grad))
 
       opt.zero_grad()
+      from time import time
+      start=time()
       paddle_loss=paddle_out.sum().backward( )
+      print("backward time:",time()-start)
 
       paddle_grad=Recmodel_paddle.embedding_user.weight.gradient()
       print("paddle grad:",np.mean(paddle_grad),np.max(paddle_grad),np.min(paddle_grad))

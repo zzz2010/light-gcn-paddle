@@ -164,7 +164,7 @@ class LastFM(BasicDataset):
             assert len(index) == len(data)
             self.Graph = torch.sparse.FloatTensor(index.t(), data, torch.Size(
                 [self.n_users + self.m_items, self.n_users + self.m_items]))
-            self.Graph = self.Graph.coalesce().to(world.device)
+            self.Graph = self.Graph.coalesce()
         return self.Graph
 
     def __build_test(self):
@@ -324,7 +324,7 @@ class Loader(BasicDataset):
                 end = self.n_users + self.m_items
             else:
                 end = (i_fold + 1) * fold_len
-            A_fold.append(self._convert_sp_mat_to_sp_tensor(A[start:end]).coalesce().to(world.device))
+            A_fold.append(self._convert_sp_mat_to_sp_tensor(A[start:end]).coalesce() )
         return A_fold
 
     def _convert_sp_mat_to_sp_tensor(self, X):

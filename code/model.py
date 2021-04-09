@@ -13,7 +13,8 @@ from dataloader import BasicDataset
 from paddorch import nn
 import numpy as np
 
-
+use_fast_mm=False
+use_sparse_embed=False
 class BasicModel(nn.Module):    
     def __init__(self):
         super(BasicModel, self).__init__()
@@ -97,9 +98,9 @@ class LightGCN(BasicModel):
         self.keep_prob = self.config['keep_prob']
         self.A_split = self.config['A_split']
         self.embedding_user = torch.nn.Embedding(
-            num_embeddings=self.num_users, embedding_dim=self.latent_dim)
+            num_embeddings=self.num_users, embedding_dim=self.latent_dim,sparse=use_sparse_embed)
         self.embedding_item = torch.nn.Embedding(
-            num_embeddings=self.num_items, embedding_dim=self.latent_dim)
+            num_embeddings=self.num_items, embedding_dim=self.latent_dim,sparse=use_sparse_embed)
         if self.config['pretrain'] == 0:
 #             nn.init.xavier_uniform_(self.embedding_user.weight, gain=1)
 #             nn.init.xavier_uniform_(self.embedding_item.weight, gain=1)
@@ -164,12 +165,13 @@ class LightGCN(BasicModel):
             if self.A_split:
                 temp_emb = []
                 for f in range(len(g_droped)):
-                    temp_emb.append(torch.sparse.mm(g_droped[f], all_emb))
+                    temp_emb.append(torch.sparse.mm(g_droped[f], all_emb,use_fast_mm))
                 side_emb = torch.cat(temp_emb, dim=0)
                 all_emb = side_emb
 
             else:
-                all_emb = torch.sparse.mm(g_droped, all_emb)
+
+                all_emb = torch.sparse.mm(g_droped, all_emb,use_fast_mm)
 
             # all_emb.stop_gradient=False
             embs.append(all_emb)
