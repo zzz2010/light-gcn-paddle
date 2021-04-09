@@ -47,16 +47,21 @@ with fluid.dygraph.guard(place=place):
         world.cprint("not enable tensorflowboard")
 
     try:
+        last_best_recall=0
+        current_recall_20=0
         for epoch in range(world.TRAIN_epochs):
 
             start = time.time()
             if epoch %10 == 0:
                 cprint("[TEST]")
-                Procedure.Test(dataset, Recmodel, epoch, w, world.config['multicore'])
-
+                results=Procedure.Test(dataset, Recmodel, epoch, w, world.config['multicore'])
+                current_recall_20=results['recall'][0]
             output_information = Procedure.BPR_train_original(dataset, Recmodel, bpr, epoch, neg_k=Neg_k,w=w)
             print(f'EPOCH[{epoch+1}/{world.TRAIN_epochs}] {output_information}')
-            torch.save(Recmodel.state_dict(), weight_file)
+            if last_best_recall < current_recall_20:
+                last_best_recall=current_recall_20
+                print("save model at EPOCH",epoch)
+                torch.save(Recmodel.state_dict(), weight_file)
     finally:
         if world.tensorboard:
             w.close()
