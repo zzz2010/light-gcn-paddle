@@ -49,8 +49,7 @@ config['pretrain'] = args.pretrain
 config['A_split'] = False
 config['bigdata'] = False
 
-GPU = torch.cuda.is_available()
-device = torch.device('cuda' if GPU else "cpu")
+device = args.device
 CORES = multiprocessing.cpu_count() // 2
 seed = args.seed
 
