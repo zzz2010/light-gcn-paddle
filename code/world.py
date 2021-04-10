@@ -40,6 +40,11 @@ config['latent_dim_rec'] = args.recdim
 config['lightGCN_n_layers']= args.layer
 config['dropout'] = args.dropout
 config['keep_prob']  = args.keepprob
+if args.single>0:
+    config['single']=True
+else:
+    config['single'] = False
+
 config['A_n_fold'] = args.a_fold
 config['test_u_batch_size'] = args.testbatch
 config['multicore'] = args.multicore

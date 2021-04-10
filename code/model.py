@@ -176,10 +176,13 @@ class LightGCN(BasicModel):
             # all_emb.stop_gradient=False
             embs.append(all_emb)
 
-        embs = torch.stack(embs, dim=1)
+        if world.config['single']:
+            light_out=embs[-1]
+        else:
+            embs = torch.stack(embs, dim=1)
 
-        #print(embs.size())
-        light_out = torch.mean(embs, dim=1)
+            #print(embs.size())
+            light_out = torch.mean(embs, dim=1)
 
 
         users, items = torch.split(light_out, [self.num_users, self.num_items])
