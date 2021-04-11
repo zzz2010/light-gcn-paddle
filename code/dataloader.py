@@ -281,7 +281,7 @@ class Loader(BasicDataset):
 
         # (users,items), bipartite graph
         self.UserItemNet = csr_matrix((np.ones(len(self.trainUser)), (self.trainUser, self.trainItem)),
-                                      shape=(self.n_user, self.m_item))
+                                      shape=(self.n_user, self.m_item)).astype(np.float32)
         self.users_D = np.array(self.UserItemNet.sum(axis=1)).squeeze()
         self.users_D[self.users_D == 0.] = 1
         self.items_D = np.array(self.UserItemNet.sum(axis=0)).squeeze()
@@ -343,7 +343,7 @@ class Loader(BasicDataset):
                 s = time()
                 adj_mat = sp.dok_matrix((self.n_users + self.m_items, self.n_users + self.m_items), dtype=np.float32)
                 adj_mat = adj_mat.tolil()
-                R = self.UserItemNet.tolil()
+                R = self.UserItemNet.tolil().astype(np.float32)
                 adj_mat[:self.n_users, self.n_users:] = R
                 adj_mat[self.n_users:, :self.n_users] = R.T
                 adj_mat = adj_mat.todok()

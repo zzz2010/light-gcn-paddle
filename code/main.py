@@ -46,6 +46,9 @@ with fluid.dygraph.guard(place=place):
         w = None
         world.cprint("not enable tensorflowboard")
 
+    if world.config['single']:
+        world.cprint("LightGCN-Single mode")
+
     try:
         last_best_recall=0
         current_recall_20=0

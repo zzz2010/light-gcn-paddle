@@ -174,10 +174,13 @@ class LightGCN(BasicModel):
                 all_emb = torch.sparse.mm(g_droped, all_emb,use_fast_mm)
 
             # all_emb.stop_gradient=False
-            embs.append(all_emb)
+            if world.config['single']:
+                embs=all_emb # only keep the last one
+            else:
+                embs.append(all_emb)
 
         if world.config['single']:
-            light_out=embs[-1]
+            light_out=embs
         else:
             embs = torch.stack(embs, dim=1)
 
