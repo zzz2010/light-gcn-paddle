@@ -105,6 +105,13 @@ if __name__ == '__main__':
       plt.savefig("debug.png")
       plt.show()
 
+      cprint("[TEST]|" + world.dataset)
+      Neg_k = 1
+      epoch=1
+      w=None
+      bpr = utils.BPRLoss(Recmodel_paddle, world.config)
+      results = Procedure.Test(dataset, Recmodel_paddle, epoch, w, world.config['multicore'])
+
 
 
 
